@@ -1,5 +1,5 @@
 from repositories.product_repository import ProductRepository
-from schemas.product_schema import validate_product
+from schemas.product_schema import validate_product, validate_status
 from utils.errors import AppError
 
 
@@ -23,10 +23,10 @@ class ProductService:
         return self.repo.update(product_id, data)
 
     def change_status(self, product_id, data):
-        status = (data or {}).get("status")
-        if not status:
-            raise AppError("El campo status es requerido", code="VALIDATION_ERROR", status=422)
-        return self.repo.update_status(product_id, status)
+        errors = validate_status(data)
+        if errors:
+            raise AppError("Datos inválidos", code="VALIDATION_ERROR", status=422, details=errors)
+        return self.repo.update_status(product_id, str(data["status"]).strip())
 
     def delete(self, product_id):
         return self.repo.update_status(product_id, "inactivo")
