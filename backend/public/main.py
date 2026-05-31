@@ -1,4 +1,5 @@
 import json
+import inspect
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
@@ -56,8 +57,10 @@ class AppHandler(BaseHTTPRequestHandler):
                 return
 
         try:
-            # Se pasa handler=self para que los controladores puedan leer headers (JWT)
-            result = route.handler(params=params, body=body, handler=self)
+            handler_kwargs = {"params": params, "body": body}
+            if "handler" in inspect.signature(route.handler).parameters:
+                handler_kwargs["handler"] = self
+            result = route.handler(**handler_kwargs)
             status = 201 if method == "POST" else 200
             self._send_json(status, result)
         except AppError as exc:
