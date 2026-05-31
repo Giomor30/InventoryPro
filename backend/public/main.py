@@ -56,7 +56,8 @@ class AppHandler(BaseHTTPRequestHandler):
                 return
 
         try:
-            result = route.handler(params=params, body=body)
+            
+            result = route.handler(params=params, body=body, handler=self)
             status = 201 if method == "POST" else 200
             self._send_json(status, result)
         except AppError as exc:
@@ -94,7 +95,7 @@ def run_server():
     host = "0.0.0.0"
     port = env.PORT
     server = HTTPServer((host, port), AppHandler)
-    print(f"InventoryPro API: http://localhost:{port}")
+    print(f"InventoryPro API: http://localhost: 8000")
     print(f"CORS permitido para: {env.FRONTEND_ORIGIN}")
     server.serve_forever()
 
