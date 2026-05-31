@@ -29,4 +29,4 @@ def get_all_routes():
     ):
         routes.extend(register())
 
-    return routes 
+    return routes
