@@ -1,22 +1,20 @@
 import re
 
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+from schemas.validators import validate_text
+
+
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 def validate_supplier(data):
     errors = []
     data = data or {}
 
-    name = data.get("name")
-    if not name or not str(name).strip():
-        errors.append("El nombre es obligatorio")
-    elif len(str(name).strip()) > 100:
-        errors.append("El nombre no puede tener más de 100 caracteres")
+    validate_text(errors, data, "name", "El nombre", max_length=100)
+    validate_text(errors, data, "contact_email", "El correo de contacto", max_length=120)
 
-    email = data.get("contact_email")
-    if not email or not str(email).strip():
-        errors.append("El correo de contacto es obligatorio")
-    elif not EMAIL_RE.match(str(email).strip()):
+    email = str(data.get("contact_email") or "").strip()
+    if email and not EMAIL_PATTERN.match(email):
         errors.append("El correo de contacto no tiene un formato válido")
 
     phone = data.get("phone")

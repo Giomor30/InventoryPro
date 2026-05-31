@@ -261,6 +261,27 @@ nav a.active span {
   color: #444;
 }
 
+.catalog-header {
+  gap: 16px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.search-field input {
+  width: min(280px, 38vw);
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
 .panel-header button {
   background: #008b86;
   color: white;
@@ -268,6 +289,89 @@ nav a.active span {
   padding: 11px 18px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.catalog-form-panel {
+  margin-bottom: 24px;
+}
+
+.catalog-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.catalog-form.three-columns,
+.catalog-form.product-form {
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+}
+
+.catalog-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #444;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.catalog-form input,
+.catalog-form select {
+  min-height: 40px;
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  padding: 9px 11px;
+  color: #333;
+  font-size: 14px;
+  background: white;
+}
+
+.catalog-form .input-error {
+  border-color: #c0392b;
+  background: #fff7f7;
+}
+
+.field-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #c0392b;
+  font-size: 14px;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button,
+.table-actions button {
+  background: #008b86;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.form-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-actions .secondary-button {
+  background: #607d8b;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.table-actions .danger-button {
+  background: #c0392b;
 }
 
 table {
@@ -372,6 +476,26 @@ tr:hover {
 
   .inventory-grid {
     grid-template-columns: 1fr;
+  }
+
+  .catalog-form,
+  .catalog-form.three-columns,
+  .catalog-form.product-form {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-field {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-field input {
+    width: 100%;
   }
 }
 

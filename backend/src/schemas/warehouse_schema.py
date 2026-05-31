@@ -1,24 +1,17 @@
+from schemas.validators import as_number, is_blank, validate_text
+
+
 def validate_warehouse(data):
     errors = []
     data = data or {}
 
-    name = data.get("name")
-    if not name or not str(name).strip():
-        errors.append("El nombre es obligatorio")
-    elif len(str(name).strip()) > 100:
-        errors.append("El nombre no puede tener más de 100 caracteres")
-
-    location = data.get("location")
-    if location is not None and len(str(location).strip()) > 200:
-        errors.append("La ubicación no puede tener más de 200 caracteres")
+    validate_text(errors, data, "name", "El nombre", max_length=100)
+    validate_text(errors, data, "code", "El código", max_length=30)
+    validate_text(errors, data, "location", "La ubicación", required=False, max_length=200)
+    validate_text(errors, data, "manager", "El encargado", required=False, max_length=100)
 
     capacity = data.get("capacity")
-    if capacity is not None:
-        try:
-            cap = float(capacity)
-            if cap < 0:
-                errors.append("La capacidad no puede ser negativa")
-        except (TypeError, ValueError):
-            errors.append("La capacidad debe ser un número")
+    if not is_blank(capacity):
+        as_number(capacity, "capacidad", errors, minimum=0)
 
     return errors

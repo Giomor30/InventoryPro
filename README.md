@@ -65,3 +65,7 @@ App: `http://localhost:5173`
 | PUT | `/api/products/:id` |
 | PATCH | `/api/products/:id/status` |
 | DELETE | `/api/products/:id` |
+| GET/POST | `/api/warehouses` |
+| PUT | `/api/warehouses/:id` |
+| PATCH | `/api/warehouses/:id/status` |
+| DELETE | `/api/warehouses/:id` |

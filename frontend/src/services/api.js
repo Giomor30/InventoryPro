@@ -28,12 +28,30 @@ async function request(path, options = {}) {
   return data;
 }
 
+const jsonOptions = (method, body) => ({
+  method,
+  body: JSON.stringify(body),
+});
+
 export const api = {
   health: () => request("/api/health"),
   dashboard: () => request("/api/dashboard/summary"),
   products: () => request("/api/products"),
+  createProduct: (data) => request("/api/products", jsonOptions("POST", data)),
+  updateProduct: (id, data) => request(`/api/products/${id}`, jsonOptions("PUT", data)),
+  deleteProduct: (id) => request(`/api/products/${id}`, { method: "DELETE" }),
   categories: () => request("/api/categories"),
+  createCategory: (data) => request("/api/categories", jsonOptions("POST", data)),
+  updateCategory: (id, data) => request(`/api/categories/${id}`, jsonOptions("PUT", data)),
+  deleteCategory: (id) => request(`/api/categories/${id}`, { method: "DELETE" }),
   suppliers: () => request("/api/suppliers"),
+  createSupplier: (data) => request("/api/suppliers", jsonOptions("POST", data)),
+  updateSupplier: (id, data) => request(`/api/suppliers/${id}`, jsonOptions("PUT", data)),
+  deleteSupplier: (id) => request(`/api/suppliers/${id}`, { method: "DELETE" }),
+  warehouses: () => request("/api/warehouses"),
+  createWarehouse: (data) => request("/api/warehouses", jsonOptions("POST", data)),
+  updateWarehouse: (id, data) => request(`/api/warehouses/${id}`, jsonOptions("PUT", data)),
+  deleteWarehouse: (id) => request(`/api/warehouses/${id}`, { method: "DELETE" }),
 };
 
 export default api;

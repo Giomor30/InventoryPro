@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 
 const initialForm = {
+  code: "",
   name: "",
-  contact_email: "",
-  phone: "",
+  location: "",
+  manager: "",
 };
 
-export default function SuppliersPage() {
-  const [suppliers, setSuppliers] = useState([]);
+export default function WarehousesPage() {
+  const [warehouses, setWarehouses] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
@@ -17,31 +18,31 @@ export default function SuppliersPage() {
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
 
-  const loadSuppliers = () => {
+  const loadWarehouses = () => {
     setLoading(true);
     api
-      .suppliers()
-      .then((res) => setSuppliers(res.data || []))
+      .warehouses()
+      .then((res) => setWarehouses(res.data || []))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    loadSuppliers();
+    loadWarehouses();
   }, []);
 
-  const filteredSuppliers = useMemo(() => {
+  const filteredWarehouses = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!term) {
-      return suppliers;
+      return warehouses;
     }
 
-    return suppliers.filter((item) =>
-      [item.name, item.contact_email, item.phone, item.status]
+    return warehouses.filter((warehouse) =>
+      [warehouse.name, warehouse.code, warehouse.location, warehouse.manager, warehouse.status]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(term))
     );
-  }, [search, suppliers]);
+  }, [search, warehouses]);
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -55,16 +56,12 @@ export default function SuppliersPage() {
   };
 
   const validateForm = () => {
+    if (!form.code.trim()) {
+      return "El código es obligatorio.";
+    }
+
     if (!form.name.trim()) {
       return "El nombre es obligatorio.";
-    }
-
-    if (!form.contact_email.trim()) {
-      return "El correo de contacto es obligatorio.";
-    }
-
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.contact_email.trim())) {
-      return "El correo no tiene un formato válido.";
     }
 
     return "";
@@ -83,19 +80,20 @@ export default function SuppliersPage() {
     setSaving(true);
     try {
       const payload = {
+        code: form.code.trim(),
         name: form.name.trim(),
-        contact_email: form.contact_email.trim(),
-        phone: form.phone.trim(),
+        location: form.location.trim(),
+        manager: form.manager.trim(),
       };
 
       if (editingId) {
-        await api.updateSupplier(editingId, payload);
+        await api.updateWarehouse(editingId, payload);
       } else {
-        await api.createSupplier(payload);
+        await api.createWarehouse(payload);
       }
 
       resetForm();
-      loadSuppliers();
+      loadWarehouses();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -103,28 +101,29 @@ export default function SuppliersPage() {
     }
   };
 
-  const handleEdit = (item) => {
-    setEditingId(item.id);
+  const handleEdit = (warehouse) => {
+    setEditingId(warehouse.id);
     setForm({
-      name: item.name || "",
-      contact_email: item.contact_email || "",
-      phone: item.phone || "",
+      code: warehouse.code || "",
+      name: warehouse.name || "",
+      location: warehouse.location || "",
+      manager: warehouse.manager || "",
     });
     setFieldError("");
   };
 
-  const handleDelete = async (item) => {
-    if (!window.confirm(`¿Eliminar el proveedor "${item.name}"?`)) {
+  const handleDelete = async (warehouse) => {
+    if (!window.confirm(`¿Dar de baja el almacén "${warehouse.name}"?`)) {
       return;
     }
 
     setError("");
     try {
-      await api.deleteSupplier(item.id);
-      if (editingId === item.id) {
+      await api.deleteWarehouse(warehouse.id);
+      if (editingId === warehouse.id) {
         resetForm();
       }
-      loadSuppliers();
+      loadWarehouses();
     } catch (err) {
       setError(err.message);
     }
@@ -132,15 +131,25 @@ export default function SuppliersPage() {
 
   return (
     <section>
-      <h1 className="page-title">Proveedores</h1>
+      <h1 className="page-title">Almacenes</h1>
       {error && <p className="error-text">{error}</p>}
 
       <div className="panel catalog-form-panel">
         <div className="panel-header">
-          <h2>{editingId ? "Editar proveedor" : "Nuevo proveedor"}</h2>
+          <h2>{editingId ? "Editar almacén" : "Nuevo almacén"}</h2>
         </div>
 
-        <form className="catalog-form three-columns" onSubmit={handleSubmit}>
+        <form className="catalog-form" onSubmit={handleSubmit}>
+          <label>
+            Código
+            <input
+              className={fieldError.includes("código") ? "input-error" : ""}
+              name="code"
+              value={form.code}
+              onChange={updateField}
+              placeholder="Ej. CEDIS-01"
+            />
+          </label>
           <label>
             Nombre
             <input
@@ -148,27 +157,25 @@ export default function SuppliersPage() {
               name="name"
               value={form.name}
               onChange={updateField}
-              placeholder="Ej. Suministros del Norte"
+              placeholder="Ej. Almacén central"
             />
           </label>
           <label>
-            Email
+            Ubicación
             <input
-              className={fieldError.includes("correo") ? "input-error" : ""}
-              name="contact_email"
-              type="email"
-              value={form.contact_email}
+              name="location"
+              value={form.location}
               onChange={updateField}
-              placeholder="contacto@proveedor.com"
+              placeholder="Ciudad o dirección"
             />
           </label>
           <label>
-            Teléfono
+            Encargado
             <input
-              name="phone"
-              value={form.phone}
+              name="manager"
+              value={form.manager}
               onChange={updateField}
-              placeholder="555-000-0000"
+              placeholder="Nombre del responsable"
             />
           </label>
           {fieldError && <p className="field-error">{fieldError}</p>}
@@ -187,14 +194,14 @@ export default function SuppliersPage() {
 
       <div className="panel">
         <div className="panel-header catalog-header">
-          <h2>Proveedores registrados</h2>
+          <h2>Almacenes registrados</h2>
           <label className="search-field">
             <span>Buscar</span>
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Nombre, email o teléfono"
+              placeholder="Nombre, código o ubicación"
             />
           </label>
         </div>
@@ -205,32 +212,38 @@ export default function SuppliersPage() {
           <table>
             <thead>
               <tr>
+                <th>Código</th>
                 <th>Nombre</th>
-                <th>Email</th>
-                <th>Teléfono</th>
+                <th>Ubicación</th>
+                <th>Encargado</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {filteredSuppliers.length === 0 ? (
+              {filteredWarehouses.length === 0 ? (
                 <tr>
-                  <td colSpan="5">No hay proveedores registrados.</td>
+                  <td colSpan="6">No hay almacenes para mostrar.</td>
                 </tr>
               ) : (
-                filteredSuppliers.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.contact_email}</td>
-                    <td>{item.phone || "-"}</td>
-                    <td>{item.status || "activo"}</td>
+                filteredWarehouses.map((warehouse) => (
+                  <tr key={warehouse.id}>
+                    <td>{warehouse.code}</td>
+                    <td>{warehouse.name}</td>
+                    <td>{warehouse.location || "-"}</td>
+                    <td>{warehouse.manager || "-"}</td>
+                    <td>
+                      <span className={`badge ${warehouse.status === "inactivo" ? "danger" : "success"}`}>
+                        {warehouse.status || "activo"}
+                      </span>
+                    </td>
                     <td>
                       <div className="table-actions">
-                        <button type="button" onClick={() => handleEdit(item)}>
+                        <button type="button" onClick={() => handleEdit(warehouse)}>
                           Editar
                         </button>
-                        <button className="danger-button" type="button" onClick={() => handleDelete(item)}>
-                          Eliminar
+                        <button className="danger-button" type="button" onClick={() => handleDelete(warehouse)}>
+                          Dar de baja
                         </button>
                       </div>
                     </td>

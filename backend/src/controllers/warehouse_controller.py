@@ -20,6 +20,10 @@ class WarehouseController:
         result = self.service.update(params["id"], body)
         return {"success": True, "message": "Almacén actualizado", "data": result}
 
+    def change_status(self, params=None, body=None):
+        result = self.service.change_status(params["id"], body)
+        return {"success": True, "message": "Estado del almacén actualizado", "data": result}
+
     def delete(self, params=None, body=None):
         self.service.delete(params["id"])
-        return {"success": True, "message": "Almacén eliminado", "data": None}
+        return {"success": True, "message": "Almacén dado de baja", "data": None}
