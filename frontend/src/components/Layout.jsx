@@ -1,7 +1,17 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 export default function Layout() {
+  const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail") || "usuario@inventorypro.com";
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userRole");
+    window.location.href = "/login";
+  };
 
   return (
     <div className="layout">
@@ -15,8 +25,11 @@ export default function Layout() {
       <aside className="sidebar">
         <div className="profile">
           <div className="avatar">👤</div>
-          <h3>Usuario</h3>
+          <h3>{userName || "Usuario"}</h3>
           <p>{userEmail}</p>
+          <button type="button" className="secondary-button" onClick={handleLogout} style={{ marginTop: "12px" }}>
+            Salir
+          </button>
         </div>
 
         <div className="menu-title">NAVEGACIÓN PRINCIPAL</div>
