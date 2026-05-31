@@ -10,6 +10,9 @@ class WarehouseService:
     def get_all(self):
         return self.repo.find_all()
 
+    def get_by_id(self, warehouse_id):
+        return self.repo.find_by_id(warehouse_id)
+
     def create(self, data):
         errors = validate_warehouse(data)
         if errors:

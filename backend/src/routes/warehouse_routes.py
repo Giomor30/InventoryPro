@@ -7,6 +7,7 @@ _controller = WarehouseController()
 def warehouse_routes():
     return [
         Route("GET", "/api/warehouses", _controller.get_all),
+        Route("GET", "/api/warehouses/:id", _controller.get_one),
         Route("POST", "/api/warehouses", _controller.create),
         Route("PUT", "/api/warehouses/:id", _controller.update),
         Route("PATCH", "/api/warehouses/:id/status", _controller.change_status),

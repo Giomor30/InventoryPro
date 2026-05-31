@@ -1,6 +1,9 @@
 from schemas.validators import as_number, is_blank, validate_text
 
 
+ALLOWED_STATUSES = {"activo", "inactivo"}
+
+
 def validate_product(data):
     errors = []
     data = data or {}
@@ -18,5 +21,18 @@ def validate_product(data):
 
     if not is_blank(data.get("min_stock")):
         as_number(data.get("min_stock"), "stock mínimo", errors, minimum=0)
+
+    return errors
+
+
+def validate_status(data):
+    errors = []
+    data = data or {}
+
+    status = data.get("status")
+    if not status or not str(status).strip():
+        errors.append("El campo status es requerido")
+    elif str(status).strip() not in ALLOWED_STATUSES:
+        errors.append(f"El status debe ser uno de: {', '.join(sorted(ALLOWED_STATUSES))}")
 
     return errors
