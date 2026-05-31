@@ -44,3 +44,31 @@ class MovementService:
         if warehouse.get("status") == "inactivo":
             raise AppError("El almacén está inactivo", code="WAREHOUSE_INACTIVE", status=422)
         return warehouse
+
+    def _current_quantity(self, product_id, warehouse_id):
+        row = self.stock.find_by_product_and_warehouse(product_id, warehouse_id)
+        return float(row.get("quantity") or 0)
+
+    def register_in(self, data):
+        payload, product, warehouse = self._validate_movement_data(data, "in")
+        stock_before = self._current_quantity(payload["product_id"], payload["warehouse_id"])
+        stock_after = stock_before + payload["quantity"]
+
+        movement = self.movements.save_movement({
+            "type": "in",
+            "product_id": payload["product_id"],
+            "warehouse_id": payload["warehouse_id"],
+            "quantity": payload["quantity"],
+            "reason": payload["reason"],
+            "reference": payload["reference"],
+            "stock_before": stock_before,
+            "stock_after": stock_after,
+            "product_name": product.get("name"),
+            "warehouse_name": warehouse.get("name"),
+        })
+        stock_row = self.stock.set_quantity(
+            payload["product_id"],
+            payload["warehouse_id"],
+            stock_after,
+        )
+        return {"movement": movement, "stock": stock_row}
