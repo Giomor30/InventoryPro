@@ -33,6 +33,17 @@ const jsonOptions = (method, body) => ({
   body: JSON.stringify(body),
 });
 
+const withQuery = (path, params = {}) => {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && String(value).trim() !== "") {
+      query.set(key, String(value).trim());
+    }
+  });
+  const qs = query.toString();
+  return qs ? `${path}?${qs}` : path;
+};
+
 export const api = {
   health: () => request("/api/health"),
   dashboard: () => request("/api/dashboard/summary"),
@@ -52,6 +63,10 @@ export const api = {
   createWarehouse: (data) => request("/api/warehouses", jsonOptions("POST", data)),
   updateWarehouse: (id, data) => request(`/api/warehouses/${id}`, jsonOptions("PUT", data)),
   deleteWarehouse: (id) => request(`/api/warehouses/${id}`, { method: "DELETE" }),
+  inventoryStock: (params) => request(withQuery("/api/inventory/stock", params)),
+  inventoryMovements: (params) => request(withQuery("/api/inventory/movements", params)),
+  inventoryMovementIn: (data) => request("/api/inventory/movements/in", jsonOptions("POST", data)),
+  inventoryMovementOut: (data) => request("/api/inventory/movements/out", jsonOptions("POST", data)),
 };
 
 export default api;
