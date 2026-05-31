@@ -1,0 +1,428 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eeeeee;
+  color: #333;
+}
+
+.layout {
+  min-height: 100vh;
+}
+
+.topbar {
+  height: 82px;
+  width: 100%;
+  background: #008b86;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  color: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brand {
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-icon {
+  font-size: 34px;
+  transform: rotate(-15deg);
+  display: inline-block;
+}
+
+.sidebar {
+  position: fixed;
+  top: 82px;
+  left: 0;
+  width: 360px;
+  height: calc(100vh - 82px);
+  background: #f7f7f7;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+}
+
+.profile {
+  background: #dce9e7;
+  padding: 22px 20px;
+  text-align: left;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border: 3px solid #008b86;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  margin-bottom: 15px;
+}
+
+.profile h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #333;
+}
+
+.profile p {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.menu-title {
+  background: #e5e5e5;
+  color: #444;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 13px 18px;
+  letter-spacing: 0.5px;
+}
+
+nav {
+  padding-top: 10px;
+}
+
+nav button,
+nav a {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 17px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #444;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+nav button span,
+nav a span {
+  width: 22px;
+  color: #666;
+  font-size: 20px;
+}
+
+nav button:hover,
+nav a:hover {
+  background: #e9f5f4;
+  color: #008b86;
+}
+
+nav button.active,
+nav a.active {
+  color: #008b86;
+  background: #ffffff;
+  border-left: 5px solid #008b86;
+}
+
+nav button.active span,
+nav a.active span {
+  color: #008b86;
+}
+
+.main-content {
+  margin-left: 360px;
+  padding: 34px 34px;
+  min-height: calc(100vh - 82px);
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: normal;
+  color: #555;
+  margin: 0 0 18px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 34px;
+}
+
+.stat-card {
+  height: 96px;
+  display: flex;
+  color: white;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
+}
+
+.stat-icon {
+  width: 98px;
+  min-width: 98px;
+  font-size: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.stat-info {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.stat-info h2 {
+  margin: 4px 0 0;
+  font-size: 30px;
+  font-weight: normal;
+}
+
+.teal {
+  background: #008b86;
+}
+
+.orange {
+  background: #f7a600;
+}
+
+.purple {
+  background: #673ab7;
+}
+
+.gray {
+  background: #607d8b;
+}
+
+.blue {
+  background: #3f51b5;
+}
+
+.pink {
+  background: #e91e63;
+}
+
+.sky {
+  background: #1e88e5;
+}
+
+.deeporange {
+  background: #f4511e;
+}
+
+.green {
+  background: #43a047;
+}
+
+.red {
+  background: #f44336;
+}
+
+.brown {
+  background: #795548;
+}
+
+.cyan {
+  background: #00acc1;
+}
+
+.panel {
+  background: white;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #444;
+}
+
+.panel-header button {
+  background: #008b86;
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #008b86;
+  color: white;
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+tr:hover {
+  background: #f7f7f7;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  color: white;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge.success {
+  background: #43a047;
+}
+
+.badge.warning {
+  background: #f7a600;
+}
+
+.badge.danger {
+  background: #f44336;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.inventory-card {
+  background: white;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inventory-card h3 {
+  margin: 0;
+  color: #008b86;
+}
+
+.inventory-card p {
+  margin: 0;
+  color: #777;
+}
+
+.inventory-card strong {
+  font-size: 20px;
+  color: #333;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .inventory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inventory-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.error-text {
+  color: #c0392b;
+  margin-bottom: 12px;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7f7;
+}
+
+.login-panel {
+  width: min(420px, 90vw);
+  text-align: left;
+}
+
+.login-panel h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-panel label {
+  display: block;
+  margin-bottom: 14px;
+  font-weight: bold;
+  color: #444;
+}
+
+.login-panel input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+.login-panel button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 20px;
+  background: #008b86;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
