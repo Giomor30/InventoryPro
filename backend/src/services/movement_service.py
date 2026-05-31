@@ -72,3 +72,35 @@ class MovementService:
             stock_after,
         )
         return {"movement": movement, "stock": stock_row}
+
+    def register_out(self, data):
+        payload, product, warehouse = self._validate_movement_data(data, "out")
+        stock_before = self._current_quantity(payload["product_id"], payload["warehouse_id"])
+        stock_after = stock_before - payload["quantity"]
+
+        if stock_after < 0:
+            raise AppError(
+                "Stock insuficiente para esta salida",
+                code="INSUFFICIENT_STOCK",
+                status=422,
+                details=[f"Disponible: {stock_before}, solicitado: {payload['quantity']}"],
+            )
+
+        movement = self.movements.save_movement({
+            "type": "out",
+            "product_id": payload["product_id"],
+            "warehouse_id": payload["warehouse_id"],
+            "quantity": payload["quantity"],
+            "reason": payload["reason"],
+            "reference": payload["reference"],
+            "stock_before": stock_before,
+            "stock_after": stock_after,
+            "product_name": product.get("name"),
+            "warehouse_name": warehouse.get("name"),
+        })
+        stock_row = self.stock.set_quantity(
+            payload["product_id"],
+            payload["warehouse_id"],
+            stock_after,
+        )
+        return {"movement": movement, "stock": stock_row}
