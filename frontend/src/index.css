@@ -364,6 +364,12 @@ nav a.active span {
   background: #607d8b;
 }
 
+.form-hint {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
 .table-actions {
   display: flex;
   gap: 8px;

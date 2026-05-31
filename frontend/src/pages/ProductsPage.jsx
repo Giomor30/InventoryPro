@@ -6,7 +6,8 @@ const initialForm = {
   category_id: "",
   supplier_id: "",
   price: "",
-  stock: "",
+  warehouse_id: "",
+  initial_stock: "",
   min_stock: "",
 };
 
@@ -14,6 +15,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [warehouses, setWarehouses] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
@@ -24,11 +26,12 @@ export default function ProductsPage() {
 
   const loadCatalogs = () => {
     setLoading(true);
-    Promise.all([api.products(), api.categories(), api.suppliers()])
-      .then(([productsRes, categoriesRes, suppliersRes]) => {
+    Promise.all([api.products(), api.categories(), api.suppliers(), api.warehouses()])
+      .then(([productsRes, categoriesRes, suppliersRes, warehousesRes]) => {
         setProducts(productsRes.data || []);
         setCategories(categoriesRes.data || []);
         setSuppliers(suppliersRes.data || []);
+        setWarehouses((warehousesRes.data || []).filter((w) => w.status !== "inactivo"));
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
@@ -92,8 +95,14 @@ export default function ProductsPage() {
       return "El precio debe ser mayor o igual a 0.";
     }
 
-    if (form.stock !== "" && Number(form.stock) < 0) {
-      return "El stock no puede ser negativo.";
+    if (!editingId) {
+      const qty = form.initial_stock === "" ? 0 : Number(form.initial_stock);
+      if (qty < 0) {
+        return "La cantidad inicial no puede ser negativa.";
+      }
+      if (qty > 0 && !form.warehouse_id) {
+        return "Elige el almacén donde entra el stock inicial.";
+      }
     }
 
     if (form.min_stock !== "" && Number(form.min_stock) < 0) {
@@ -120,14 +129,30 @@ export default function ProductsPage() {
         category_id: form.category_id,
         supplier_id: form.supplier_id,
         price: Number(form.price),
-        stock: form.stock === "" ? 0 : Number(form.stock),
+        stock: 0,
         min_stock: form.min_stock === "" ? 0 : Number(form.min_stock),
       };
 
       if (editingId) {
-        await api.updateProduct(editingId, payload);
+        const existing = products.find((p) => p.id === editingId);
+        await api.updateProduct(editingId, {
+          ...payload,
+          stock: existing?.stock ?? 0,
+        });
       } else {
-        await api.createProduct(payload);
+        const created = await api.createProduct(payload);
+        const productId = created.data?.id;
+        const qty = form.initial_stock === "" ? 0 : Number(form.initial_stock);
+
+        if (productId && qty > 0) {
+          await api.inventoryMovementIn({
+            product_id: productId,
+            warehouse_id: form.warehouse_id,
+            quantity: qty,
+            reason: "Stock inicial",
+          });
+          await api.updateProduct(productId, { ...payload, stock: qty });
+        }
       }
 
       resetForm();
@@ -146,7 +171,8 @@ export default function ProductsPage() {
       category_id: product.category_id || "",
       supplier_id: product.supplier_id || "",
       price: product.price ?? "",
-      stock: product.stock ?? "",
+      warehouse_id: "",
+      initial_stock: "",
       min_stock: product.min_stock ?? "",
     });
     setFieldError("");
@@ -230,18 +256,44 @@ export default function ProductsPage() {
               placeholder="0.00"
             />
           </label>
-          <label>
-            Stock
-            <input
-              className={fieldError.includes("stock no") ? "input-error" : ""}
-              name="stock"
-              type="number"
-              min="0"
-              value={form.stock}
-              onChange={updateField}
-              placeholder="0"
-            />
-          </label>
+          {!editingId && (
+            <>
+              <label>
+                Almacén inicial
+                <select
+                  className={fieldError.includes("almacén") ? "input-error" : ""}
+                  name="warehouse_id"
+                  value={form.warehouse_id}
+                  onChange={updateField}
+                >
+                  <option value="">Sin stock en almacén</option>
+                  {warehouses.map((warehouse) => (
+                    <option key={warehouse.id} value={warehouse.id}>
+                      {warehouse.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Cantidad inicial
+                <input
+                  className={fieldError.includes("cantidad") ? "input-error" : ""}
+                  name="initial_stock"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={form.initial_stock}
+                  onChange={updateField}
+                  placeholder="0"
+                />
+              </label>
+            </>
+          )}
+          {editingId && (
+            <p className="form-hint">
+              Para cambiar stock por almacén usa Movimientos o revisa Inventario.
+            </p>
+          )}
           <label>
             Stock mínimo
             <input
@@ -292,7 +344,7 @@ export default function ProductsPage() {
                 <th>Categoría</th>
                 <th>Proveedor</th>
                 <th>Precio</th>
-                <th>Stock</th>
+                <th>Stock ref.</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
