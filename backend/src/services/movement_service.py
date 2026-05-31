@@ -3,6 +3,7 @@ from repositories.product_repository import ProductRepository
 from repositories.stock_repository import StockRepository
 from repositories.warehouse_repository import WarehouseRepository
 from schemas.movement_schema import validate_movement
+from schemas.stock_schema import validate_movement_list_query
 from utils.errors import AppError
 
 
@@ -104,3 +105,19 @@ class MovementService:
             stock_after,
         )
         return {"movement": movement, "stock": stock_row}
+
+    def list_movements(self, filters=None):
+        filters = filters or {}
+        errors = validate_movement_list_query(filters)
+        if errors:
+            raise AppError("Parámetros inválidos", code="VALIDATION_ERROR", status=422, details=errors)
+
+        product_id = (filters.get("product_id") or "").strip() or None
+        warehouse_id = (filters.get("warehouse_id") or "").strip() or None
+        movement_type = (filters.get("type") or "").strip() or None
+
+        return self.movements.find_filtered(
+            product_id=product_id,
+            warehouse_id=warehouse_id,
+            movement_type=movement_type,
+        )
