@@ -49,6 +49,9 @@ export const api = {
   updateSupplier: (id, data) => request(`/api/suppliers/${id}`, jsonOptions("PUT", data)),
   deleteSupplier: (id) => request(`/api/suppliers/${id}`, { method: "DELETE" }),
   warehouses: () => request("/api/warehouses"),
+  createWarehouse: (data) => request("/api/warehouses", jsonOptions("POST", data)),
+  updateWarehouse: (id, data) => request(`/api/warehouses/${id}`, jsonOptions("PUT", data)),
+  deleteWarehouse: (id) => request(`/api/warehouses/${id}`, { method: "DELETE" }),
 };
 
 export default api;
