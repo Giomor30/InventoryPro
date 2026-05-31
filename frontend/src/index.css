@@ -81,6 +81,18 @@ body {
   font-size: 14px;
 }
 
+.role-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #008b86;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .menu-title {
   background: #e5e5e5;
   color: #444;

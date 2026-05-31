@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -24,14 +24,13 @@ export default function RegisterPage() {
           name: name.trim(),
           email: email.trim(),
           password,
-          role: "Consulta",
         }),
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
         throw new Error(data.message || "No se pudo registrar");
       }
-      setOk("Cuenta creada. Ya puedes iniciar sesión.");
+      setOk("Cuenta creada. Ya puedes iniciar sesion.");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -62,7 +61,7 @@ export default function RegisterPage() {
           />
         </label>
         <label>
-          Contraseña
+          Contrasena
           <input
             type="password"
             value={password}

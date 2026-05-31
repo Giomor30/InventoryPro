@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import RoleRoute from "./components/RoleRoute";
 import CategoriesPage from "./pages/CategoriesPage";
 import DashboardPage from "./pages/DashboardPage";
 import InventoryPage from "./pages/InventoryPage";
@@ -27,20 +28,79 @@ export default function App() {
           }
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="productos" element={<ProductsPage />} />
-          <Route path="categorias" element={<CategoriesPage />} />
-          <Route path="proveedores" element={<SuppliersPage />} />
-          <Route path="almacenes" element={<WarehousesPage />} />
-          <Route path="inventario" element={<InventoryPage />} />
-          <Route path="movimientos" element={<MovementsPage />} />
+          <Route
+            path="dashboard"
+            element={
+              <RoleRoute routeKey="dashboard">
+                <DashboardPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="productos"
+            element={
+              <RoleRoute routeKey="productos">
+                <ProductsPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="categorias"
+            element={
+              <RoleRoute routeKey="categorias">
+                <CategoriesPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="proveedores"
+            element={
+              <RoleRoute routeKey="proveedores">
+                <SuppliersPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="almacenes"
+            element={
+              <RoleRoute routeKey="almacenes">
+                <WarehousesPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="inventario"
+            element={
+              <RoleRoute routeKey="inventario">
+                <InventoryPage />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="movimientos"
+            element={
+              <RoleRoute routeKey="movimientos">
+                <MovementsPage />
+              </RoleRoute>
+            }
+          />
           <Route
             path="reportes"
             element={
-              <PlaceholderPage
-                title="Reportes"
-                description="Resúmenes y exportaciones."
-              />
+              <RoleRoute routeKey="reportes">
+                <PlaceholderPage title="Reportes" description="Resúmenes y exportaciones." />
+              </RoleRoute>
+            }
+          />
+          <Route
+            path="usuarios"
+            element={
+              <RoleRoute routeKey="usuarios">
+                <PlaceholderPage
+                  title="Usuarios"
+                  description="Gestión de usuarios y roles (próximamente)."
+                />
+              </RoleRoute>
             }
           />
         </Route>

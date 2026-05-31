@@ -1,34 +1,35 @@
-import re
+﻿import re
+
+from utils.role_helper import CANONICAL_ROLES, normalize_role
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-ALLOWED_ROLES = {"Admin", "Almacén", "Compras", "Consulta"}
 
 
 def validate_user_update(data):
-    """Validación para actualizar un usuario (todos los campos opcionales excepto si se envían)."""
+    """Validacion para actualizar un usuario."""
     errors = []
     data = data or {}
 
     name = data.get("name")
     if name is not None:
         if not str(name).strip():
-            errors.append("El nombre no puede estar vacío")
+            errors.append("El nombre no puede estar vacio")
         elif len(str(name).strip()) > 100:
-            errors.append("El nombre no puede tener más de 100 caracteres")
+            errors.append("El nombre no puede tener mas de 100 caracteres")
 
     email = data.get("email")
     if email is not None:
         if not str(email).strip():
-            errors.append("El correo no puede estar vacío")
+            errors.append("El correo no puede estar vacio")
         elif not EMAIL_RE.match(str(email).strip()):
-            errors.append("El correo no tiene un formato válido")
+            errors.append("El correo no tiene un formato valido")
 
     role = data.get("role")
-    if role is not None and str(role) not in ALLOWED_ROLES:
-        errors.append(f"El rol debe ser uno de: {', '.join(sorted(ALLOWED_ROLES))}")
+    if role is not None and normalize_role(role) not in CANONICAL_ROLES:
+        errors.append(f"El rol debe ser uno de: {', '.join(sorted(CANONICAL_ROLES))}")
 
     password = data.get("password")
     if password is not None and len(str(password)) < 8:
-        errors.append("La contraseña debe tener al menos 8 caracteres")
+        errors.append("La contrasena debe tener al menos 8 caracteres")
 
     return errors

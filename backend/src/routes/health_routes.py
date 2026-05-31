@@ -1,4 +1,4 @@
-from utils.router import Route
+﻿from utils.router import Route
 
 
 def health_routes():
@@ -13,10 +13,14 @@ def health_routes():
             },
         }
 
-    def dashboard(params=None, body=None):
+    def dashboard(params=None, body=None, handler=None):
+        from middlewares.auth_middleware import require_auth, require_roles
         from repositories.category_repository import CategoryRepository
         from repositories.product_repository import ProductRepository
         from repositories.supplier_repository import SupplierRepository
+
+        payload = require_auth(handler)
+        require_roles("Admin", "Almacen", "Compras", "Consulta")(payload)
 
         products = ProductRepository().find_all()
         active_products = [p for p in products if p.get("status") != "inactivo"]
