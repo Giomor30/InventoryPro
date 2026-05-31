@@ -1,0 +1,25 @@
+from services.warehouse_service import WarehouseService
+
+
+class WarehouseController:
+    def __init__(self):
+        self.service = WarehouseService()
+
+    def get_all(self, params=None, body=None):
+        return {"success": True, "message": "Almacenes obtenidos", "data": self.service.get_all()}
+
+    def get_one(self, params=None, body=None):
+        result = self.service.get_by_id(params["id"])
+        return {"success": True, "message": "Almacén obtenido", "data": result}
+
+    def create(self, params=None, body=None):
+        result = self.service.create(body)
+        return {"success": True, "message": "Almacén creado", "data": result}
+
+    def update(self, params=None, body=None):
+        result = self.service.update(params["id"], body)
+        return {"success": True, "message": "Almacén actualizado", "data": result}
+
+    def delete(self, params=None, body=None):
+        self.service.delete(params["id"])
+        return {"success": True, "message": "Almacén eliminado", "data": None}

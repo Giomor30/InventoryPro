@@ -56,7 +56,7 @@ class AppHandler(BaseHTTPRequestHandler):
                 return
 
         try:
-            # Se pasa handler=self para que los controladores puedan leer headers (JWT)
+           
             result = route.handler(params=params, body=body, handler=self)
             status = 201 if method == "POST" else 200
             self._send_json(status, result)
