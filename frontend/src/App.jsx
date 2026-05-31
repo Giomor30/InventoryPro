@@ -2,7 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import CategoriesPage from "./pages/CategoriesPage";
 import DashboardPage from "./pages/DashboardPage";
+import InventoryPage from "./pages/InventoryPage";
 import LoginPage, { ProtectedRoute } from "./pages/LoginPage";
+import MovementsPage from "./pages/MovementsPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import ProductsPage from "./pages/ProductsPage";
 import SuppliersPage from "./pages/SuppliersPage";
@@ -28,24 +30,8 @@ export default function App() {
           <Route path="categorias" element={<CategoriesPage />} />
           <Route path="proveedores" element={<SuppliersPage />} />
           <Route path="almacenes" element={<WarehousesPage />} />
-          <Route
-            path="inventario"
-            element={
-              <PlaceholderPage
-                title="Inventario"
-                description="Stock por almacén."
-              />
-            }
-          />
-          <Route
-            path="movimientos"
-            element={
-              <PlaceholderPage
-                title="Movimientos"
-                description="Entradas, salidas y ajustes."
-              />
-            }
-          />
+          <Route path="inventario" element={<InventoryPage />} />
+          <Route path="movimientos" element={<MovementsPage />} />
           <Route
             path="reportes"
             element={
