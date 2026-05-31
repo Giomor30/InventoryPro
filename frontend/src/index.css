@@ -261,6 +261,27 @@ nav a.active span {
   color: #444;
 }
 
+.catalog-header {
+  gap: 16px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.search-field input {
+  width: min(280px, 38vw);
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
 .panel-header button {
   background: #008b86;
   color: white;

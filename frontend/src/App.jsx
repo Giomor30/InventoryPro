@@ -6,6 +6,7 @@ import LoginPage, { ProtectedRoute } from "./pages/LoginPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import ProductsPage from "./pages/ProductsPage";
 import SuppliersPage from "./pages/SuppliersPage";
+import WarehousesPage from "./pages/WarehousesPage";
 import "./App.css";
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="productos" element={<ProductsPage />} />
           <Route path="categorias" element={<CategoriesPage />} />
           <Route path="proveedores" element={<SuppliersPage />} />
+          <Route path="almacenes" element={<WarehousesPage />} />
           <Route
             path="inventario"
             element={

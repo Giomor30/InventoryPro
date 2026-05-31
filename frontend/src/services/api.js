@@ -34,6 +34,7 @@ export const api = {
   products: () => request("/api/products"),
   categories: () => request("/api/categories"),
   suppliers: () => request("/api/suppliers"),
+  warehouses: () => request("/api/warehouses"),
 };
 
 export default api;
