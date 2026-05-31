@@ -2,7 +2,6 @@ from schemas.validators import is_blank, validate_text
 
 
 def validate_stock_query(params):
-    """Valida filtros opcionales para GET /api/inventory/stock."""
     errors = []
     params = params or {}
 
@@ -20,7 +19,6 @@ def validate_stock_query(params):
 
 
 def validate_movement_list_query(params):
-    """Valida filtros opcionales para listar movimientos."""
     errors = []
     params = params or {}
 

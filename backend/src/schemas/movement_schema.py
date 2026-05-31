@@ -4,7 +4,6 @@ MOVEMENT_TYPES = {"in", "out"}
 
 
 def validate_movement(data, movement_type):
-    """Valida cuerpo para entrada (in) o salida (out) de inventario."""
     errors = []
     data = data or {}
 

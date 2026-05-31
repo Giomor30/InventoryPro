@@ -36,7 +36,10 @@ copy .env.example .env
 python public/main.py
 ```
 
-Configura `FIREBASE_CREDENTIALS_PATH` en `backend/.env` con la ruta al JSON de Firebase.
+Configura en `backend/.env`:
+
+- `FIREBASE_CREDENTIALS_PATH` — ruta al JSON de Firebase
+- `JWT_SECRET` — clave larga inventada por el equipo (no subir a Git)
 
 Servidor: `http://localhost:8000`
 
@@ -69,3 +72,33 @@ App: `http://localhost:5173`
 | PUT | `/api/warehouses/:id` |
 | PATCH | `/api/warehouses/:id/status` |
 | DELETE | `/api/warehouses/:id` |
+| POST | `/api/auth/register` |
+| POST | `/api/auth/login` |
+| POST | `/api/auth/refresh` |
+| GET | `/api/auth/me` |
+| POST | `/api/auth/logout` |
+| GET/PUT/DELETE | `/api/users` y `/api/users/:id` |
+| GET | `/api/inventory/stock` |
+| GET | `/api/inventory/movements` |
+| POST | `/api/inventory/movements/in` |
+| POST | `/api/inventory/movements/out` |
+
+### Inventario
+
+`GET /api/inventory/stock` acepta query opcional: `product_id`, `warehouse_id`.
+
+`GET /api/inventory/movements` acepta query opcional: `type` (`in` o `out`), `product_id`, `warehouse_id`.
+
+Cuerpo para entrada/salida:
+
+```json
+{
+  "product_id": "id del producto",
+  "warehouse_id": "id del almacén",
+  "quantity": 10,
+  "reason": "Venta mostrador",
+  "reference": "F-1024"
+}
+```
+
+`reason` y `reference` son opcionales. La salida falla si no hay stock suficiente.
