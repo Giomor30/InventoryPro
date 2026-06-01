@@ -1,12 +1,16 @@
 import { Navigate } from "react-router-dom";
-import { canAccessRoute, getCurrentRole } from "../utils/permissions";
+import { hasPermission } from "../utils/permissions";
 
-export default function RoleRoute({ routeKey, children }) {
-  const role = getCurrentRole();
+export default function RoleRoute({ permission, children }) {
+  const token = localStorage.getItem("token");
 
-  if (!canAccessRoute(routeKey, role)) {
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!hasPermission(permission)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   return children;
-}
+} 
