@@ -74,6 +74,17 @@
   opacity: 0.85;
 }
 
+.register-role-note {
+  margin: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.78);
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .register-button {
   height: 50px;
   border-radius: 999px;

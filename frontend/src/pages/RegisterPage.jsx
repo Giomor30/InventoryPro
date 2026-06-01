@@ -11,7 +11,6 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    role: "Consulta",
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,7 +40,6 @@ export default function RegisterPage() {
           name: form.name,
           email: form.email,
           password: form.password,
-          role: form.role,
         }),
       });
 
@@ -106,19 +104,9 @@ export default function RegisterPage() {
             <span>🔒</span>
           </div>
 
-          <div className="register-input-group">
-            <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              required
-            >
-              <option value="Consulta">Consulta</option>
-              <option value="Almacén">Almacén</option>
-              <option value="Compras">Compras</option>
-            </select>
-            <span>🛡️</span>
-          </div>
+          <p className="register-role-note">
+            Tu cuenta se creará con rol Consulta. Un administrador puede cambiar tu rol después.
+          </p>
 
           {error && <p className="register-error">{error}</p>}
           {success && <p className="register-success">{success}</p>}

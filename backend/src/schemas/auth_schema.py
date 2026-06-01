@@ -1,6 +1,9 @@
 import re
 
+from utils.role_helper import normalize_role
+
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+ALLOWED_ROLES = {"Admin", "Almacen", "Compras", "Consulta"}
 
 
 def _validate_identity_fields(data):
@@ -28,14 +31,16 @@ def _validate_identity_fields(data):
     return errors
 
 
-def validate_register(data):
+def validate_register(data, allow_role_assignment=False):
     errors = _validate_identity_fields(data)
     data = data or {}
 
-    # Registro publico: no permite escalar rol.
     role = data.get("role")
-    if role is not None and str(role) != "Consulta":
-        errors.append("El registro publico solo permite rol Consulta")
+    if not allow_role_assignment:
+        if role is not None and normalize_role(role) != "Consulta":
+            errors.append("El registro publico solo permite rol Consulta")
+    elif role is not None and normalize_role(role) not in ALLOWED_ROLES:
+        errors.append("Rol no permitido")
 
     return errors
 

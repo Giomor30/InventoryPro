@@ -22,7 +22,8 @@ class AuthService:
         Si caller_role == 'Admin', respeta el rol enviado en data.
         De lo contrario, fuerza rol 'Consulta'.
         """
-        errors = validate_register(data)
+        can_assign_role = caller_role == "Admin"
+        errors = validate_register(data, allow_role_assignment=can_assign_role)
         if errors:
             raise AppError("Datos invalidos", code="VALIDATION_ERROR", status=422, details=errors)
 
@@ -30,8 +31,7 @@ class AuthService:
         if self.repo.email_exists(email):
             raise AppError("El correo ya esta registrado", code="EMAIL_TAKEN", status=409)
 
-        # Solo Admin puede asignar roles distintos a Consulta
-        if caller_role == "Admin" and data.get("role"):
+        if can_assign_role and data.get("role"):
             role = normalize_role(data["role"]) or "Consulta"
         else:
             role = "Consulta"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { hasPermission } from "../utils/permissions";
+import { getRoleLabel, hasPermission, normalizeRole } from "../utils/permissions";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -117,7 +117,7 @@ export default function UsersPage() {
       name: user.name || "",
       email: user.email || "",
       password: "",
-      role: user.role || "Consulta",
+      role: normalizeRole(user.role),
     });
   };
 
@@ -278,6 +278,7 @@ export default function UsersPage() {
                 onChange={handleChange}
                 required
               >
+                <option value="Admin">Administrador</option>
                 <option value="Almacén">Almacén</option>
                 <option value="Compras">Compras</option>
                 <option value="Consulta">Consulta</option>
@@ -325,7 +326,7 @@ export default function UsersPage() {
                 <tr key={user.id || user.email}>
                   <td>{user.name || "Sin nombre"}</td>
                   <td>{user.email}</td>
-                  <td>{user.role || "Consulta"}</td>
+                  <td>{getRoleLabel(user.role)}</td>
                   <td>{user.status || "activo"}</td>
 
                   {(canUpdate || canDelete) && (
