@@ -15,6 +15,11 @@
   --radius-md: 12px;
   --font-display: "Exo 2", system-ui, sans-serif;
   --font-body: "DM Sans", system-ui, sans-serif;
+  --input-bg: #142a3f;
+  --select-bg: #142a3f;
+  --option-bg: #0d1f30;
+  --option-text: #f4f7fb;
+  --option-hover: #1a4a58;
 }
 
 * {
@@ -251,6 +256,7 @@ nav a.active span,
   max-width: calc(100vw - var(--sidebar-w));
   min-height: calc(100vh - var(--topbar-h));
   overflow-x: hidden;
+  color-scheme: dark;
 }
 
 .page-shell,
@@ -427,6 +433,10 @@ section {
   color: rgba(255, 255, 255, 0.88);
 }
 
+/* Controles de formulario — toda la app (productos, movimientos, usuarios, etc.) */
+.main-content input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.main-content select,
+.main-content textarea,
 .catalog-form input,
 .catalog-form select,
 .form-grid input,
@@ -435,20 +445,85 @@ section {
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.06);
+  background-color: var(--input-bg);
   color: #fff;
   font-family: var(--font-body);
   font-size: 0.9rem;
   max-width: 100%;
 }
 
+.main-content input::placeholder,
+.main-content textarea::placeholder,
+.catalog-form input::placeholder,
+.form-grid input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.main-content select,
+.catalog-form select,
+.form-grid select {
+  color-scheme: dark;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--select-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23fbbf24' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.main-content select option,
+.main-content select optgroup,
+.catalog-form select option,
+.form-grid select option {
+  background-color: var(--option-bg);
+  color: var(--option-text);
+}
+
+.main-content select option:checked,
+.catalog-form select option:checked,
+.form-grid select option:checked {
+  background-color: var(--option-hover);
+  color: #fff;
+}
+
+.main-content select option:hover,
+.catalog-form select option:hover,
+.form-grid select option:hover {
+  background-color: var(--option-hover);
+  color: #fff;
+}
+
+.main-content input:focus,
+.main-content select:focus,
+.main-content textarea:focus,
 .catalog-form input:focus,
 .catalog-form select:focus,
 .form-grid input:focus,
 .form-grid select:focus {
   outline: none;
-  border-color: rgba(251, 191, 36, 0.5);
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.55);
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+  background-color: #1a3348;
+}
+
+.main-content select:focus,
+.catalog-form select:focus,
+.form-grid select:focus {
+  color: #fff;
+}
+
+/* Fallback global: listas desplegables en cualquier select del layout */
+.layout select {
+  color-scheme: dark;
+}
+
+.layout select option {
+  background-color: var(--option-bg) !important;
+  color: var(--option-text) !important;
 }
 
 .catalog-form .input-error {
