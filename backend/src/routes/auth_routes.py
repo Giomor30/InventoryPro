@@ -7,6 +7,7 @@ _controller = AuthController()
 def auth_routes():
     return [
         Route("POST", "/api/auth/register", _controller.register),
+        Route("POST", "/api/auth/bootstrap-admin", _controller.bootstrap_admin),
         Route("POST", "/api/auth/login",    _controller.login),
         Route("POST", "/api/auth/refresh",  _controller.refresh),
         Route("GET",  "/api/auth/me",       _controller.me),

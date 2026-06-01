@@ -22,3 +22,10 @@ class UserRepository(FirestoreRepository):
 
     def email_exists(self, email: str) -> bool:
         return self.find_by_email(email) is not None
+
+    def admin_exists(self) -> bool:
+        for role_name in ("Admin", "Administrador"):
+            docs = list(self._collection().where("role", "==", role_name).limit(1).stream())
+            if docs:
+                return True
+        return False

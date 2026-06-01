@@ -1,5 +1,6 @@
-from utils.errors import AppError
+﻿from utils.errors import AppError
 from utils.jwt_helper import decode_token
+from utils.role_helper import normalize_role
 
 
 def get_token_from_handler(handler) -> str:
@@ -15,13 +16,19 @@ def require_auth(handler):
     token = get_token_from_handler(handler)
     payload = decode_token(token)
     if payload.get("type") != "access":
-        raise AppError("Token inválido", code="TOKEN_INVALID", status=401)
+        raise AppError("Token invalido", code="TOKEN_INVALID", status=401)
+
+    payload["role"] = normalize_role(payload.get("role"))
     return payload
 
 
 def require_roles(*allowed_roles):
-    """Devuelve una función que verifica que el usuario tenga uno de los roles permitidos."""
+    """Verifica que el usuario tenga uno de los roles permitidos."""
+    normalized_allowed = {normalize_role(role) for role in allowed_roles}
+
     def check(payload: dict):
-        if payload.get("role") not in allowed_roles:
-            raise AppError("No tienes permisos para esta acción", code="FORBIDDEN", status=403)
+        current_role = normalize_role(payload.get("role"))
+        if current_role not in normalized_allowed:
+            raise AppError("No tienes permisos para esta accion", code="FORBIDDEN", status=403)
+
     return check

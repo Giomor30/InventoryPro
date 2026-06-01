@@ -13,3 +13,4 @@ FIREBASE_CREDENTIALS_PATH = os.environ.get("FIREBASE_CREDENTIALS_PATH", "").stri
 JWT_SECRET = os.environ.get("JWT_SECRET", "cambia_esto_en_produccion").strip()
 JWT_ACCESS_EXPIRES_MINUTES = int(os.environ.get("JWT_ACCESS_EXPIRES_MINUTES", "60"))
 JWT_REFRESH_EXPIRES_DAYS = int(os.environ.get("JWT_REFRESH_EXPIRES_DAYS", "7"))
+ADMIN_SETUP_KEY = os.environ.get("ADMIN_SETUP_KEY", "").strip()

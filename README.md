@@ -1,6 +1,6 @@
 # InventoryPro
 
-Sistema de control de inventario — proyecto fullstack.
+Sistema de control de inventario - proyecto fullstack.
 
 ## Stack
 
@@ -9,7 +9,7 @@ Sistema de control de inventario — proyecto fullstack.
 
 ## Estructura
 
-```
+```text
 backend/
   public/main.py
   src/
@@ -23,9 +23,10 @@ backend/
     utils/
 frontend/
   src/
+docs/
 ```
 
-## Instalación
+## Instalacion
 
 ### Backend
 
@@ -38,8 +39,9 @@ python public/main.py
 
 Configura en `backend/.env`:
 
-- `FIREBASE_CREDENTIALS_PATH` — ruta al JSON de Firebase
-- `JWT_SECRET` — clave larga inventada por el equipo (no subir a Git)
+- `FIREBASE_CREDENTIALS_PATH` - ruta al JSON de Firebase
+- `JWT_SECRET` - clave larga inventada por el equipo (no subir a Git)
+- `ADMIN_SETUP_KEY` - llave para crear el primer admin desde backend
 
 Servidor: `http://localhost:8000`
 
@@ -56,8 +58,8 @@ App: `http://localhost:5173`
 
 ## Endpoints
 
-| Método | Ruta |
-|--------|------|
+| Metodo | Ruta |
+|---|---|
 | GET | `/api/health` |
 | GET | `/api/dashboard/summary` |
 | GET/POST | `/api/categories` |
@@ -69,10 +71,12 @@ App: `http://localhost:5173`
 | PATCH | `/api/products/:id/status` |
 | DELETE | `/api/products/:id` |
 | GET/POST | `/api/warehouses` |
+| GET | `/api/warehouses/:id` |
 | PUT | `/api/warehouses/:id` |
 | PATCH | `/api/warehouses/:id/status` |
 | DELETE | `/api/warehouses/:id` |
 | POST | `/api/auth/register` |
+| POST | `/api/auth/bootstrap-admin` |
 | POST | `/api/auth/login` |
 | POST | `/api/auth/refresh` |
 | GET | `/api/auth/me` |
@@ -94,7 +98,7 @@ Cuerpo para entrada/salida:
 ```json
 {
   "product_id": "id del producto",
-  "warehouse_id": "id del almacén",
+  "warehouse_id": "id del almacen",
   "quantity": 10,
   "reason": "Venta mostrador",
   "reference": "F-1024"
@@ -102,3 +106,10 @@ Cuerpo para entrada/salida:
 ```
 
 `reason` y `reference` son opcionales. La salida falla si no hay stock suficiente.
+
+## Seguridad de roles
+
+- El registro publico (`POST /api/auth/register`) crea usuarios con rol `Consulta`.
+- La creacion del primer administrador se realiza con `POST /api/auth/bootstrap-admin`.
+- El endpoint de bootstrap requiere header `X-Setup-Key` y solo funciona si no existe ya un `Admin`.
+- Revisa la matriz completa de permisos por endpoint en [docs/matriz_roles.md](docs/matriz_roles.md).
