@@ -11,4 +11,5 @@ def auth_routes():
         Route("POST", "/api/auth/refresh", _controller.refresh),
         Route("GET", "/api/auth/me", _controller.me),
         Route("POST", "/api/auth/logout", _controller.logout),
-    ]
+        Route("POST", "/api/auth/bootstrap-admin", _controller.bootstrap_admin),
+    ] 

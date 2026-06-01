@@ -28,10 +28,14 @@ class AuthController:
         return {"success": True, "message": "Usuario registrado", "data": user}
 
     def bootstrap_admin(self, params=None, body=None, handler=None):
-        setup_key = (handler.headers.get("X-Setup-Key", "") if handler else "").strip()
-        user = _service.bootstrap_admin(body, setup_key)
-        return {"success": True, "message": "Administrador creado", "data": user}
+        setup_key = handler.headers.get("X-Setup-Key") if handler else None
+        data = self.auth_service.bootstrap_admin(body, setup_key)
 
+        return {
+            "success": True,
+            "message": "Administrador creado correctamente",
+            "data": data,
+        }
     def login(self, params=None, body=None, handler=None):
         result = _service.login(body)
         return {"success": True, "message": "Login exitoso", "data": result}
