@@ -39,15 +39,16 @@ export default function ReportsPage() {
   }, []);
 
   if (loading) {
-    return <p>Cargando reporte...</p>;
-  }
-
-  if (error) {
-    return <p className="error-text">{error}</p>;
+    return (
+      <section className="page">
+        <h1>Reportes</h1>
+        <p>Cargando reporte...</p>
+      </section>
+    );
   }
 
   return (
-    <section className="page">
+    <section className="page reports-page">
       <div className="page-header">
         <div>
           <h1>Reportes</h1>
@@ -59,43 +60,50 @@ export default function ReportsPage() {
         </button>
       </div>
 
-      <div className="cards-grid">
-        <article className="stat-card">
-          <h3>Productos</h3>
+      {error && <p className="error-text">{error}</p>}
+
+      <div className="reports-grid">
+        <article className="report-card">
+          <span>Productos</span>
           <strong>{report?.total_products ?? 0}</strong>
         </article>
 
-        <article className="stat-card">
-          <h3>Almacenes</h3>
+        <article className="report-card">
+          <span>Almacenes</span>
           <strong>{report?.total_warehouses ?? 0}</strong>
         </article>
 
-        <article className="stat-card">
-          <h3>Stock total</h3>
+        <article className="report-card">
+          <span>Stock total</span>
           <strong>{report?.total_stock ?? 0}</strong>
         </article>
 
-        <article className="stat-card">
-          <h3>Entradas</h3>
+        <article className="report-card">
+          <span>Entradas</span>
           <strong>{report?.total_entries ?? 0}</strong>
         </article>
 
-        <article className="stat-card">
-          <h3>Salidas</h3>
+        <article className="report-card">
+          <span>Salidas</span>
           <strong>{report?.total_outputs ?? 0}</strong>
         </article>
 
-        <article className="stat-card">
-          <h3>Stock bajo</h3>
+        <article className="report-card warning">
+          <span>Stock bajo</span>
           <strong>{report?.low_stock_count ?? 0}</strong>
         </article>
       </div>
 
-      <section className="panel" style={{ marginTop: "24px" }}>
-        <h2>Productos con stock bajo</h2>
+      <section className="panel reports-panel">
+        <div className="panel-header">
+          <div>
+            <h2>Productos con stock bajo</h2>
+            <p>Productos que requieren revisión o reabastecimiento.</p>
+          </div>
+        </div>
 
         {!report?.low_stock?.length ? (
-          <p>No hay productos con stock bajo.</p>
+          <p className="empty-text">No hay productos con stock bajo.</p>
         ) : (
           <table>
             <thead>
@@ -108,8 +116,8 @@ export default function ReportsPage() {
             <tbody>
               {report.low_stock.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.product_id || "Sin producto"}</td>
-                  <td>{item.warehouse_id || "Sin almacén"}</td>
+                  <td>{item.product_name || item.product_id || "Sin producto"}</td>
+                  <td>{item.warehouse_name || item.warehouse_id || "Sin almacén"}</td>
                   <td>{item.quantity ?? 0}</td>
                 </tr>
               ))}
@@ -119,4 +127,4 @@ export default function ReportsPage() {
       </section>
     </section>
   );
-}
+} 
