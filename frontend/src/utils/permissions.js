@@ -1,83 +1,127 @@
-const CANONICAL_ROLES = new Set(["Admin", "Almacen", "Compras", "Consulta"]);
+export const ROLE_PERMISSIONS = {
+  Admin: [
+    "dashboard:read",
 
-/** Rutas accesibles por rol (lectura / navegacion). Alineado con docs/matriz_roles.md */
-export const ROUTE_ACCESS = {
-  dashboard: CANONICAL_ROLES,
-  productos: CANONICAL_ROLES,
-  categorias: CANONICAL_ROLES,
-  proveedores: CANONICAL_ROLES,
-  almacenes: CANONICAL_ROLES,
-  inventario: CANONICAL_ROLES,
-  movimientos: CANONICAL_ROLES,
-  reportes: CANONICAL_ROLES,
-  usuarios: new Set(["Admin"]),
+    "users:read",
+    "users:create",
+    "users:update",
+    "users:delete",
+
+    "products:read",
+    "products:create",
+    "products:update",
+    "products:delete",
+
+    "categories:read",
+    "categories:create",
+    "categories:update",
+    "categories:delete",
+
+    "suppliers:read",
+    "suppliers:create",
+    "suppliers:update",
+    "suppliers:delete",
+
+    "warehouses:read",
+    "warehouses:create",
+    "warehouses:update",
+    "warehouses:delete",
+
+    "inventory:read",
+    "inventory:movement_in",
+    "inventory:movement_out",
+
+    "reports:read",
+    "audit:read",
+  ],
+
+  Almacén: [
+    "dashboard:read",
+
+    "products:read",
+    "categories:read",
+    "suppliers:read",
+    "warehouses:read",
+
+    "inventory:read",
+    "inventory:movement_in",
+    "inventory:movement_out",
+  ],
+
+  Compras: [
+    "dashboard:read",
+
+    "products:read",
+    "products:create",
+    "products:update",
+
+    "categories:read",
+    "categories:create",
+    "categories:update",
+
+    "suppliers:read",
+    "suppliers:create",
+    "suppliers:update",
+
+    "warehouses:read",
+
+    "inventory:read",
+
+    "reports:read",
+  ],
+
+  Consulta: [
+    "dashboard:read",
+
+    "products:read",
+    "categories:read",
+    "suppliers:read",
+    "warehouses:read",
+    "inventory:read",
+    "reports:read",
+  ],
 };
 
-export const NAV_ITEMS = [
-  { to: "/dashboard", label: "Dashboard", icon: "▦", routeKey: "dashboard" },
-  { to: "/productos", label: "Productos", icon: "◼", routeKey: "productos" },
-  { to: "/categorias", label: "Categorías", icon: "▣", routeKey: "categorias" },
-  { to: "/proveedores", label: "Proveedores", icon: "👥", routeKey: "proveedores" },
-  { to: "/almacenes", label: "Almacenes", icon: "▧", routeKey: "almacenes" },
-  { to: "/inventario", label: "Inventario", icon: "▰", routeKey: "inventario" },
-  { to: "/movimientos", label: "Movimientos", icon: "↕", routeKey: "movimientos" },
-  { to: "/reportes", label: "Reportes", icon: "▤", routeKey: "reportes" },
-  { to: "/usuarios", label: "Usuarios", icon: "⚙", routeKey: "usuarios" },
-];
-
 export function normalizeRole(role) {
-  if (role == null || role === "") {
-    return null;
-  }
+  if (!role) return "Consulta";
 
-  const compact = String(role)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z]/g, "");
+  if (role === "Administrador") return "Admin";
+  if (role === "Admin") return "Admin";
+  if (role === "Almacen") return "Almacén";
+  if (role === "Almacén") return "Almacén";
+  if (role === "Compras") return "Compras";
+  if (role === "Consulta") return "Consulta";
 
-  if (compact === "admin" || compact === "administrador") {
-    return "Admin";
-  }
-  if (compact.startsWith("almac")) {
-    return "Almacen";
-  }
-  if (compact.startsWith("compr")) {
-    return "Compras";
-  }
-  if (compact.startsWith("consult")) {
-    return "Consulta";
-  }
-
-  const trimmed = String(role).trim();
-  return CANONICAL_ROLES.has(trimmed) ? trimmed : null;
+  return "Consulta";
 }
 
-export function getCurrentRole() {
-  const normalized = normalizeRole(localStorage.getItem("userRole"));
-  return normalized && CANONICAL_ROLES.has(normalized) ? normalized : "Consulta";
-}
+export function getCurrentUser() {
+  const savedUser = localStorage.getItem("user");
 
-export function roleLabel(role) {
-  const canonical = normalizeRole(role) || role;
-  const labels = {
-    Admin: "Administrador",
-    Almacen: "Almacén",
-    Compras: "Compras",
-    Consulta: "Consulta",
+  if (savedUser) {
+    try {
+      const parsedUser = JSON.parse(savedUser);
+
+      return {
+        ...parsedUser,
+        role: normalizeRole(parsedUser.role),
+      };
+    } catch {
+      // Si el JSON está dañado, usa los campos separados.
+    }
+  }
+
+  return {
+    name: localStorage.getItem("userName") || "Usuario",
+    email: localStorage.getItem("userEmail") || "usuario@inventorypro.com",
+    role: normalizeRole(localStorage.getItem("userRole")),
   };
-  return labels[canonical] || String(role || "Consulta");
 }
 
-export function canAccessRoute(routeKey, role = getCurrentRole()) {
-  const allowed = ROUTE_ACCESS[routeKey];
-  if (!allowed) {
-    return false;
-  }
-  const canonical = normalizeRole(role) || "Consulta";
-  return allowed.has(canonical);
-}
+export function hasPermission(permission) {
+  const user = getCurrentUser();
+  const role = normalizeRole(user.role);
+  const permissions = ROLE_PERMISSIONS[role] || [];
 
-export function getVisibleNavItems(role = getCurrentRole()) {
-  return NAV_ITEMS.filter((item) => canAccessRoute(item.routeKey, role));
-}
+  return permissions.includes(permission);
+} 
