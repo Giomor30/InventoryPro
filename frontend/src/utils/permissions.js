@@ -118,6 +118,17 @@ export function getCurrentUser() {
   };
 }
 
+export function getRoleLabel(role = getCurrentUser().role) {
+  const labels = {
+    Admin: "Administrador",
+    Almacén: "Almacén",
+    Compras: "Compras",
+    Consulta: "Consulta",
+  };
+
+  return labels[normalizeRole(role)] || "Consulta";
+}
+
 export function hasPermission(permission) {
   const user = getCurrentUser();
   const role = normalizeRole(user.role);
