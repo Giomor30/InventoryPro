@@ -1,18 +1,20 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { getCurrentRole, getVisibleNavItems, roleLabel } from "../utils/permissions";
+import { getCurrentUser, getRoleLabel, hasPermission } from "../utils/permissions";
 
 export default function Layout() {
-  const userName = localStorage.getItem("userName");
-  const userEmail = localStorage.getItem("userEmail") || "usuario@inventorypro.com";
-  const userRole = getCurrentRole();
-  const navItems = getVisibleNavItems(userRole);
+  const user = getCurrentUser();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
     localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
     localStorage.removeItem("userRole");
+
     window.location.href = "/login";
   };
 
@@ -20,30 +22,117 @@ export default function Layout() {
     <div className="layout">
       <header className="topbar">
         <div className="brand">
-          <span>InventoryPro</span>
-          <span className="cart-icon">▱</span>
+          InventoryPro <span className="brand-icon">▱</span>
         </div>
       </header>
 
       <aside className="sidebar">
         <div className="profile">
           <div className="avatar">👤</div>
-          <h3>{userName || "Usuario"}</h3>
-          <p>{userEmail}</p>
-          <span className="role-badge">{roleLabel(userRole)}</span>
-          <button type="button" className="secondary-button" onClick={handleLogout} style={{ marginTop: "12px" }}>
+
+          <h3>{user.name || "Usuario"}</h3>
+          <p>{user.email || "usuario@inventorypro.com"}</p>
+
+          <span className="role-pill">{getRoleLabel()}</span>
+
+          <button type="button" className="logout-button" onClick={handleLogout}>
             Salir
           </button>
         </div>
 
         <div className="menu-title">NAVEGACIÓN PRINCIPAL</div>
 
-        <nav>
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? "active" : "")}>
-              <span>{item.icon}</span> {item.label}
+        <nav className="sidebar-nav">
+          {hasPermission("dashboard:read") && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>▦</span> Dashboard
             </NavLink>
-          ))}
+          )}
+
+          {hasPermission("products:read") && (
+            <NavLink
+              to="/productos"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>■</span> Productos
+            </NavLink>
+          )}
+
+          {hasPermission("categories:read") && (
+            <NavLink
+              to="/categorias"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>▣</span> Categorías
+            </NavLink>
+          )}
+
+          {hasPermission("suppliers:read") && (
+            <NavLink
+              to="/proveedores"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>👥</span> Proveedores
+            </NavLink>
+          )}
+
+          {hasPermission("warehouses:read") && (
+            <NavLink
+              to="/almacenes"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>▧</span> Almacenes
+            </NavLink>
+          )}
+
+          {hasPermission("inventory:read") && (
+            <NavLink
+              to="/inventario"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>▰</span> Inventario
+            </NavLink>
+          )}
+
+          {(hasPermission("inventory:movement_in") ||
+            hasPermission("inventory:movement_out")) && (
+            <NavLink
+              to="/movimientos"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>↕</span> Movimientos
+            </NavLink>
+          )}
+
+          {hasPermission("reports:read") && (
+            <NavLink
+              to="/reportes"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>▤</span> Reportes
+            </NavLink>
+          )}
+
+          {hasPermission("users:read") && (
+            <NavLink
+              to="/usuarios"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>⚙</span> Usuarios
+            </NavLink>
+          )}
+
+          {hasPermission("audit:read") && (
+            <NavLink
+              to="/auditoria"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span>☰</span> Auditoría
+            </NavLink>
+          )}
         </nav>
       </aside>
 
@@ -52,4 +141,4 @@ export default function Layout() {
       </main>
     </div>
   );
-}
+} 
