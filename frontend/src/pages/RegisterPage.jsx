@@ -90,7 +90,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
             />
-            <span>👤</span>
+            <span>✉️</span>
           </div>
 
           <div className="register-input-group">
@@ -113,10 +113,9 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
             >
-              <option value="Admin">Administrador</option>
+              <option value="Consulta">Consulta</option>
               <option value="Almacén">Almacén</option>
               <option value="Compras">Compras</option>
-              <option value="Consulta">Consulta</option>
             </select>
             <span>🛡️</span>
           </div>
