@@ -4,7 +4,8 @@
   --bg-panel-strong: rgba(255, 255, 255, 0.09);
   --border-soft: rgba(255, 255, 255, 0.12);
   --text-primary: #f4f7fb;
-  --text-muted: rgba(255, 255, 255, 0.62);
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --nav-text: rgba(255, 255, 255, 0.92);
   --accent-teal: #2dd4bf;
   --accent-gold: #fbbf24;
   --accent-danger: #f87171;
@@ -183,7 +184,7 @@ body::before {
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 nav,
@@ -201,18 +202,26 @@ nav a,
   gap: 12px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--nav-text);
   text-decoration: none;
   border-radius: 10px;
   transition: background 0.2s, color 0.2s;
   box-sizing: border-box;
 }
 
+nav a:link,
+nav a:visited,
+.sidebar-nav a:link,
+.sidebar-nav a:visited {
+  color: var(--nav-text);
+}
+
 nav a span,
 .sidebar-nav a span {
   width: 18px;
   text-align: center;
-  opacity: 0.85;
+  color: var(--accent-gold);
+  opacity: 1;
 }
 
 nav a:hover,
@@ -223,10 +232,15 @@ nav a:hover,
 
 nav a.active,
 .sidebar-nav a.active {
-  background: rgba(251, 191, 36, 0.12);
+  background: rgba(251, 191, 36, 0.15);
   color: #fff;
   border-left: none;
   box-shadow: inset 3px 0 0 var(--accent-gold);
+}
+
+nav a.active span,
+.sidebar-nav a.active span {
+  color: #fff;
 }
 
 .main-content {
@@ -371,7 +385,7 @@ section {
   align-items: center;
   gap: 8px;
   font-size: 0.85rem;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .search-field input {
@@ -410,7 +424,7 @@ section {
   gap: 6px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .catalog-form input,

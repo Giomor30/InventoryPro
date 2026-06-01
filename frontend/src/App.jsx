@@ -8,7 +8,6 @@ import DashboardPage from "./pages/DashboardPage";
 import InventoryPage from "./pages/InventoryPage";
 import LoginPage, { ProtectedRoute } from "./pages/LoginPage";
 import MovementsPage from "./pages/MovementsPage";
-import PlaceholderPage from "./pages/PlaceholderPage";
 import ProductsPage from "./pages/ProductsPage";
 import RegisterPage from "./pages/RegisterPage";
 import ReportsPage from "./pages/ReportsPage";
@@ -92,7 +91,7 @@ export default function App() {
           <Route
             path="movimientos"
             element={
-              <RoleRoute permission="inventory:movement_in">
+              <RoleRoute permission="inventory:read">
                 <MovementsPage />
               </RoleRoute>
             }
@@ -112,18 +111,6 @@ export default function App() {
             element={
               <RoleRoute permission="users:read">
                 <UsersPage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="auditoria"
-            element={
-              <RoleRoute permission="audit:read">
-                <PlaceholderPage
-                  title="Auditoría"
-                  description="Registro de acciones importantes del sistema."
-                />
               </RoleRoute>
             }
           />

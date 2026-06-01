@@ -97,8 +97,7 @@ export default function Layout() {
             </NavLink>
           )}
 
-          {(hasPermission("inventory:movement_in") ||
-            hasPermission("inventory:movement_out")) && (
+          {hasPermission("inventory:read") && (
             <NavLink
               to="/movimientos"
               className={({ isActive }) => (isActive ? "active" : "")}
@@ -122,15 +121,6 @@ export default function Layout() {
               className={({ isActive }) => (isActive ? "active" : "")}
             >
               <span>⚙</span> Usuarios
-            </NavLink>
-          )}
-
-          {hasPermission("audit:read") && (
-            <NavLink
-              to="/auditoria"
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              <span>☰</span> Auditoría
             </NavLink>
           )}
         </nav>

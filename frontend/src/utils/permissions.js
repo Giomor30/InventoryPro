@@ -32,7 +32,6 @@ export const ROLE_PERMISSIONS = {
     "inventory:movement_out",
 
     "reports:read",
-    "audit:read",
   ],
 
   Almacén: [
@@ -66,6 +65,7 @@ export const ROLE_PERMISSIONS = {
     "warehouses:read",
 
     "inventory:read",
+    "inventory:movement_in",
 
     "reports:read",
   ],
