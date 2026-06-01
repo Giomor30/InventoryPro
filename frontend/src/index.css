@@ -156,6 +156,53 @@ nav a.active span {
   min-height: calc(100vh - 82px);
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.page-header h1,
+.page h1 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-header p,
+.page > p {
+  margin: 8px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.page-header button,
+.panel table button,
+.form-grid > button {
+  min-height: 40px;
+  background: #008b86;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.page-header button:hover,
+.panel table button:hover,
+.form-grid > button:hover {
+  background: #00746f;
+}
+
 .page-title {
   font-size: 22px;
   font-weight: normal;
@@ -258,6 +305,13 @@ nav a.active span {
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   border-radius: 3px;
+  overflow-x: auto;
+}
+
+.panel > h2 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  color: #333;
 }
 
 .panel-header {
@@ -311,6 +365,56 @@ nav a.active span {
   display: grid;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
   gap: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #444;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.form-grid input,
+.form-grid select {
+  min-height: 40px;
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  padding: 9px 11px;
+  color: #333;
+  font-size: 14px;
+  background: white;
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: #008b86;
+  outline: 2px solid rgba(0, 139, 134, 0.14);
+}
+
+.form-grid > button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-grid > button[type="button"] {
+  background: #607d8b;
+}
+
+.panel table button.danger-button {
+  background: #c0392b;
+}
+
+.panel table button.danger-button:hover {
+  background: #a93226;
 }
 
 .catalog-form.three-columns,
@@ -498,10 +602,12 @@ tr:hover {
 
   .catalog-form,
   .catalog-form.three-columns,
-  .catalog-form.product-form {
+  .catalog-form.product-form,
+  .form-grid {
     grid-template-columns: 1fr;
   }
 
+  .page-header,
   .catalog-header {
     align-items: stretch;
     flex-direction: column;
