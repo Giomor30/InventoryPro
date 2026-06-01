@@ -1,0 +1,124 @@
+.register-page {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(6, 18, 34, 0.92), rgba(6, 18, 34, 0.92)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: auto, 40px 40px, 40px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 42px 36px;
+  border-radius: 18px;
+  background: rgba(30, 42, 56, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.35);
+}
+
+.register-card h1 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 28px;
+  letter-spacing: 2px;
+  font-size: 30px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-input-group {
+  position: relative;
+}
+
+.register-input-group input,
+.register-input-group select {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  padding: 0 48px 0 22px;
+  outline: none;
+  font-size: 14px;
+}
+
+.register-input-group select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.register-input-group select option {
+  color: #111827;
+  background: #ffffff;
+}
+
+.register-input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.register-input-group span {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  opacity: 0.85;
+}
+
+.register-button {
+  height: 50px;
+  border-radius: 999px;
+  border: none;
+  margin-top: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.register-button:hover {
+  transform: translateY(-1px);
+}
+
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.register-link {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.register-link a {
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-error {
+  color: #f87171;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+}
+
+.register-success {
+  color: #4ade80;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+} 

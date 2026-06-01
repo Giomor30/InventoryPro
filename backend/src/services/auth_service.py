@@ -16,7 +16,12 @@ class AuthService:
     def __init__(self):
         self.repo = UserRepository()
 
-    def register(self, data: dict) -> dict:
+    def register(self, data: dict, caller_role: str = None) -> dict:
+        """
+        Registra un nuevo usuario.
+        Si caller_role == 'Admin', respeta el rol enviado en data.
+        De lo contrario, fuerza rol 'Consulta'.
+        """
         errors = validate_register(data)
         if errors:
             raise AppError("Datos invalidos", code="VALIDATION_ERROR", status=422, details=errors)
@@ -25,11 +30,18 @@ class AuthService:
         if self.repo.email_exists(email):
             raise AppError("El correo ya esta registrado", code="EMAIL_TAKEN", status=409)
 
+        # Solo Admin puede asignar roles distintos a Consulta
+        if caller_role == "Admin" and data.get("role"):
+            role = normalize_role(data["role"]) or "Consulta"
+        else:
+            role = "Consulta"
+
         payload = {
             "name": str(data["name"]).strip(),
             "email": email,
             "password_hash": hash_password(str(data["password"])),
-            "role": "Consulta",
+            "role": role,
+            "status": "activo",
         }
         user = self.repo.save(payload)
         return _safe_user(user)
@@ -62,6 +74,7 @@ class AuthService:
             "email": email,
             "password_hash": hash_password(str(data["password"])),
             "role": "Admin",
+            "status": "activo",
         }
         user = self.repo.save(payload)
         return _safe_user(user)
@@ -78,30 +91,35 @@ class AuthService:
             raise AppError("Credenciales incorrectas", code="INVALID_CREDENTIALS", status=401)
 
         if user.get("status") == "inactivo":
-            raise AppError("Usuario desactivado", code="USER_INACTIVE", status=403)
+            raise AppError("Cuenta inactiva", code="ACCOUNT_INACTIVE", status=403)
 
-        token_payload = {"sub": user["id"], "role": normalize_role(user["role"]), "email": user["email"]}
+        role = normalize_role(user.get("role")) or "Consulta"
+        access_token = create_access_token({"sub": user["id"], "role": role})
+        refresh_token = create_refresh_token({"sub": user["id"], "role": role})
+
         return {
-            "access_token": create_access_token(token_payload),
-            "refresh_token": create_refresh_token(token_payload),
+            "access_token": access_token,
+            "refresh_token": refresh_token,
             "user": _safe_user(user),
         }
 
     def refresh(self, data: dict) -> dict:
-        token = (data or {}).get("refresh_token")
+        token = (data or {}).get("refresh_token", "")
         if not token:
-            raise AppError("refresh_token es requerido", code="VALIDATION_ERROR", status=422)
+            raise AppError("refresh_token requerido", code="TOKEN_MISSING", status=400)
 
         payload = decode_token(token)
         if payload.get("type") != "refresh":
             raise AppError("Token invalido", code="TOKEN_INVALID", status=401)
 
         user = self.repo.find_by_id(payload["sub"])
-        if user.get("status") == "inactivo":
-            raise AppError("Usuario desactivado", code="USER_INACTIVE", status=403)
+        if not user:
+            raise AppError("Usuario no encontrado", code="NOT_FOUND", status=404)
 
-        token_payload = {"sub": user["id"], "role": normalize_role(user["role"]), "email": user["email"]}
-        return {"access_token": create_access_token(token_payload)}
+        role = normalize_role(user.get("role")) or "Consulta"
+        access_token = create_access_token({"sub": user["id"], "role": role})
+        return {"access_token": access_token}
 
     def me(self, user_id: str) -> dict:
-        return _safe_user(self.repo.find_by_id(user_id))
+        user = self.repo.find_by_id(user_id)
+        return _safe_user(user)

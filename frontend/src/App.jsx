@@ -7,9 +7,10 @@ import InventoryPage from "./pages/InventoryPage";
 import LoginPage, { ProtectedRoute } from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MovementsPage from "./pages/MovementsPage";
-import PlaceholderPage from "./pages/PlaceholderPage";
 import ProductsPage from "./pages/ProductsPage";
+import ReportsPage from "./pages/ReportsPage";
 import SuppliersPage from "./pages/SuppliersPage";
+import UsersPage from "./pages/UsersPage";
 import WarehousesPage from "./pages/WarehousesPage";
 import "./App.css";
 
@@ -88,7 +89,7 @@ export default function App() {
             path="reportes"
             element={
               <RoleRoute routeKey="reportes">
-                <PlaceholderPage title="Reportes" description="Resúmenes y exportaciones." />
+                <ReportsPage />
               </RoleRoute>
             }
           />
@@ -96,10 +97,7 @@ export default function App() {
             path="usuarios"
             element={
               <RoleRoute routeKey="usuarios">
-                <PlaceholderPage
-                  title="Usuarios"
-                  description="Gestión de usuarios y roles (próximamente)."
-                />
+                <UsersPage />
               </RoleRoute>
             }
           />
